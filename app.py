@@ -3,7 +3,7 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-CORS(app)  # allow your dashboard/TradingView to call this API
+CORS(app)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,14 +22,10 @@ def download_backup():
 
 @app.route("/webhook", methods=["POST"])
 def tv_webhook():
-    # parse TradingView payload (or your test payload)
     data = request.get_json(force=True)
-    app.logger.info(f"📢 TV alert received: {data}")
-
-    # TODO: insert into your DB or dispatch your alert logic here
-
+    app.logger.info(f"📢 TV alert received: %s", data)
+    # TODO: persist data to your DB here
     return jsonify(status="received"), 200
 
 if __name__ == "__main__":
-    # debug=True lets you see errors live in the console
     app.run(debug=True, host="0.0.0.0", port=10000)
